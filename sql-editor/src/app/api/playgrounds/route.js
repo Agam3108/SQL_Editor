@@ -28,10 +28,10 @@ export async function POST(request) {
 
     const playgroundId = await database.createPlayground(title);
     
-    return NextResponse.json(
-      { id: playgroundId, message: 'Playground created successfully' },
-      { status: 201 }
-    );
+    // Get the complete playground object to return
+    const playground = await database.getPlayground(playgroundId);
+    
+    return NextResponse.json(playground, { status: 201 });
   } catch (error) {
     console.error('Error creating playground:', error);
     return NextResponse.json(
