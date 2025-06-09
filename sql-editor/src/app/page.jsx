@@ -33,17 +33,19 @@ export default function HomePage() {
 
   const createPlayground = async () => {
     try {
-      const response = await fetch('/api/playgrounds', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: 'Untitled Playground' })
-      });
-      if (!response.ok) throw new Error('Failed to create playground');
-      fetchPlaygrounds();
-    } catch (err) {
-      setError('Failed to create playground');
-      console.error(err);
-    }
+    const response = await fetch('/api/playgrounds', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ title: 'Untitled Playground' })
+    });
+    if (!response.ok) throw new Error('Failed to create playground');
+    
+    const newPlayground = await response.json();
+    setPlaygrounds(prev => [newPlayground, ...prev]); 
+  } catch (err) {
+    setError('Failed to create playground');
+    console.error(err);
+  }
   };
 
   const updatePlayground = async (id, title) => {
