@@ -15,9 +15,6 @@ class Database {
   initialized = false; // Flag to ensure initialization logic runs only once.
 
   constructor() {
-    // Initialize the database connection.
-    // sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE ensures the database
-    // is created if it doesn't exist, and is opened for reading and writing.
     this.db = new sqlite3.Database(DB_PATH, sqlite3.OPEN_READWRITE | sqlite3.OPEN_CREATE, (err) => {
       if (err) {
         console.error('Error opening database:', err.message);
@@ -87,12 +84,20 @@ class Database {
    */
   async createPlayground(title) {
     await this.init();
-    const run = promisify(this.db.run.bind(this.db));
-    const result = await run(
-      'INSERT INTO playgrounds (title) VALUES (?)',
-      [title]
-    );
-    return result.lastID; // Returns the ID of the last inserted row.
+    
+    return new Promise((resolve, reject) => {
+      this.db.run(
+        'INSERT INTO playgrounds (title) VALUES (?)',
+        [title],
+        function(err) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(this.lastID); 
+          }
+        }
+      );
+    });
   }
 
   /**
@@ -180,40 +185,30 @@ class Database {
    * @returns {Promise<Object>} A promise that resolves to an object containing columns, rows, and rowCount.
    */
   async executeQuery(query) {
-    await this.init(); // Ensure the main database is initialized.
+    await this.init(); 
 
-    // Promisify the db.run and db.all methods for execution.
-    // db.run is for DDL (CREATE, INSERT, UPDATE, DELETE) - it doesn't return data.
-    // db.all is for DML (SELECT) - it returns all matching rows.
+   
     const run = promisify(this.db.run.bind(this.db));
     const all = promisify(this.db.all.bind(this.db));
 
     try {
-      // Determine if the query is a SELECT statement to choose the correct execution method.
+      
       const isSelectQuery = query.toUpperCase().trim().startsWith('SELECT');
 
       let resultData;
       if (isSelectQuery) {
-        // For SELECT queries, use db.all to fetch rows.
         resultData = await all(query);
       } else {
-        // For non-SELECT queries (CREATE, INSERT, UPDATE, DELETE), use db.run.
-        // db.run returns info about changes (like lastID, changes) but not selected rows.
-        // We still need to return an empty array for rows and columns for consistency if no data is expected.
         await run(query);
-        resultData = []; // No rows to return for DDL/DML without a SELECT clause.
+        resultData = []; 
       }
       
-      // If no data was returned (e.g., from an INSERT or an empty SELECT),
-      // ensure we return a consistent structure.
+
       if (!resultData || resultData.length === 0) {
         return { columns: [], rows: [], rowCount: 0 };
       }
-
-      // Extract column names from the first row of the result set.
       const columns = Object.keys(resultData[0]);
-      
-      // Map the result rows to an array of arrays for easier rendering in a table.
+    
       const rows = resultData.map(row => columns.map(col => row[col]));
       
       return {
@@ -223,7 +218,7 @@ class Database {
       };
     } catch (err) {
       console.error('Error executing user query:', err);
-      throw err; // Re-throw the error so the API route can handle it.
+      throw err; 
     }
   }
 
@@ -241,5 +236,4 @@ class Database {
   }
 }
 
-// Export a single instance of the Database class to maintain a consistent connection.
 export const database = new Database();
