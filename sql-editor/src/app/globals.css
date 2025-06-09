@@ -1,0 +1,438 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* OneCompiler Inspired SQL Editor - Global Styles */
+
+:root {
+  /* Color Palette */
+  --primary-blue: #6366f1;
+  --primary-blue-hover: #5855eb;
+  --background-primary: #ffffff;
+  --background-secondary: #f8fafc;
+  --background-tertiary: #f1f5f9;
+  --border-color: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --success-green: #10b981;
+  --danger-red: #ef4444;
+  
+  /* Syntax Highlighting Colors */
+  --syntax-keyword: #8b5cf6;
+  --syntax-string: #059669;
+  --syntax-number: #dc2626;
+  --syntax-comment: #6b7280;
+  --syntax-function: #2563eb;
+  --syntax-operator: #374151;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* SQL Editor Layout Styles */
+.sql-editor-container {
+  @apply flex flex-col h-screen;
+}
+
+.sql-editor-header {
+  @apply flex items-center justify-between p-4 bg-white border-b border-gray-200;
+}
+
+.sql-editor-main {
+  @apply flex-1 flex overflow-hidden;
+}
+
+.sql-editor-sidebar {
+  @apply w-64 bg-gray-50 border-r border-gray-200 flex flex-col;
+}
+
+.sql-editor-content {
+  @apply flex-1 flex flex-col;
+}
+
+.sql-editor-tabs {
+  @apply flex items-center bg-gray-50 border-b border-gray-200 px-4;
+}
+
+.sql-editor-tab {
+  @apply px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 border-b-0 rounded-t-md cursor-pointer;
+}
+
+.sql-editor-tab.active {
+  @apply text-gray-900 bg-white;
+}
+
+.sql-editor-tab:hover {
+  @apply text-gray-900 bg-gray-100;
+}
+
+.sql-editor-toolbar {
+  @apply flex items-center justify-between p-4 bg-white border-b border-gray-200;
+}
+
+.sql-editor-controls {
+  @apply flex items-center gap-2;
+}
+
+/* Query History Styles */
+.query-history {
+  @apply p-4 space-y-2;
+}
+
+.query-history-item {
+  @apply p-3 bg-white rounded-lg border border-gray-200 cursor-pointer transition-all duration-200;
+}
+
+.query-history-item:hover {
+  @apply border-blue-300 shadow-sm;
+}
+
+.query-history-item.active {
+  @apply border-blue-500 bg-blue-50;
+}
+
+/* Connection Panel Styles */
+.connection-panel {
+  @apply p-4 bg-white border-b border-gray-200;
+}
+
+.connection-status {
+  @apply flex items-center gap-2 text-sm;
+}
+
+.connection-status.connected {
+  @apply text-green-600;
+}
+
+.connection-status.disconnected {
+  @apply text-red-600;
+}
+
+/* Results Panel Styles */
+.results-panel {
+  @apply flex-1 flex flex-col;
+}
+
+.results-tabs {
+  @apply flex items-center bg-gray-50 border-b border-gray-200;
+}
+
+.results-tab {
+  @apply px-4 py-2 text-sm font-medium text-gray-600 cursor-pointer;
+}
+
+.results-tab.active {
+  @apply text-blue-600 border-b-2 border-blue-600;
+}
+
+.results-content {
+  @apply flex-1 overflow-auto p-4;
+}
+
+/* Table Styles */
+.results-table {
+  @apply w-full border-collapse;
+}
+
+.results-table th {
+  @apply px-4 py-3 text-left text-sm font-semibold text-gray-900 bg-gray-50 border-b border-gray-200;
+}
+
+.results-table td {
+  @apply px-4 py-3 text-sm text-gray-700 border-b border-gray-200;
+}
+
+.results-table tr:hover {
+  @apply bg-gray-50;
+}
+
+/* Schema Browser Styles */
+.schema-browser {
+  @apply p-4;
+}
+
+.schema-tree {
+  @apply space-y-1;
+}
+
+.schema-node {
+  @apply flex items-center gap-2 px-2 py-1 text-sm cursor-pointer rounded hover:bg-gray-100;
+}
+
+.schema-node.expanded {
+  @apply bg-gray-100;
+}
+
+.schema-children {
+  @apply ml-4 space-y-1;
+}
+
+/* Custom scrollbar styles */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Line clamp utility for query history */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Loading animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Focus styles for better accessibility */
+.focus\:ring-2:focus {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+/* Table styles for better readability */
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #e5e7eb;
+}
+
+/* Code/SQL syntax highlighting */
+.sql-editor {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  line-height: 1.5;
+}
+
+/* Syntax Highlighting Classes */
+.keyword {
+  color: var(--syntax-keyword);
+  font-weight: 600;
+}
+
+.string {
+  color: var(--syntax-string);
+}
+
+.number {
+  color: var(--syntax-number);
+}
+
+.comment {
+  color: var(--syntax-comment);
+  font-style: italic;
+}
+
+.function {
+  color: var(--syntax-function);
+  font-weight: 600;
+}
+
+.operator {
+  color: var(--syntax-operator);
+}
+
+/* Custom button hover effects */
+.btn-hover {
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Enhanced Button Styles */
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200;
+}
+
+.btn-secondary {
+  @apply bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-md transition-colors duration-200;
+}
+
+.btn-success {
+  @apply bg-green-600 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200;
+}
+
+.btn-danger {
+  @apply bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200;
+}
+
+.btn-sm {
+  @apply px-3 py-1.5 text-sm;
+}
+
+.btn-lg {
+  @apply px-6 py-3 text-lg;
+}
+
+/* Enhanced Input Styles */
+.input-field {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+}
+
+.input-error {
+  @apply border-red-500 focus:ring-red-500;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+}
+
+.modal-content {
+  @apply bg-white rounded-lg shadow-xl max-w-md w-full mx-4;
+}
+
+.modal-header {
+  @apply px-6 py-4 border-b border-gray-200;
+}
+
+.modal-body {
+  @apply px-6 py-4;
+}
+
+.modal-footer {
+  @apply px-6 py-4 border-t border-gray-200 flex justify-end gap-2;
+}
+
+/* Notification Styles */
+.notification {
+  @apply fixed top-4 right-4 p-4 rounded-md shadow-lg z-50 max-w-sm;
+}
+
+.notification-success {
+  @apply bg-green-100 text-green-800 border border-green-200;
+}
+
+.notification-error {
+  @apply bg-red-100 text-red-800 border border-red-200;
+}
+
+.notification-warning {
+  @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
+}
+
+.notification-info {
+  @apply bg-blue-100 text-blue-800 border border-blue-200;
+}
+
+/* Loading States */
+.loading-spinner {
+  @apply inline-block w-4 h-4 border-2 border-gray-300 border-t-blue-600 rounded-full animate-spin;
+}
+
+.loading-skeleton {
+  @apply bg-gray-200 animate-pulse rounded;
+}
+
+/* Responsive Design Utilities */
+@media (max-width: 1024px) {
+  .sql-editor-sidebar {
+    @apply w-56;
+  }
+}
+
+@media (max-width: 768px) {
+  .sql-editor-container {
+    @apply flex-col;
+  }
+  
+  .sql-editor-main {
+    @apply flex-col;
+  }
+  
+  .sql-editor-sidebar {
+    @apply w-full h-64 border-r-0 border-b border-gray-200;
+  }
+  
+  .sql-editor-tabs {
+    @apply overflow-x-auto;
+  }
+  
+  .sql-editor-toolbar {
+    @apply flex-col gap-2 items-stretch;
+  }
+  
+  .sql-editor-controls {
+    @apply flex-wrap;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.slide-in {
+  animation: slideIn 0.2s ease-in-out;
+}
+
+/* Utility Classes */
+.text-truncate {
+  @apply truncate;
+}
+
+.text-wrap {
+  @apply whitespace-normal break-words;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
